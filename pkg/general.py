@@ -1,3 +1,5 @@
+import os 
+
 def test_function():
     print("## TEST ##")
 
@@ -17,3 +19,15 @@ def get_list_of_tasks():
 def name_to_filename(name : str) -> str:
     filename = ''.join(c for c in name if c.isascii())
     return filename + ".txt"
+
+def del_task(filename : str):
+    list_of_existing_tasks = os.listdir('./data/tasks')
+    if filename in list_of_existing_tasks:
+        try:
+            os.remove(f"./data/tasks/{filename}")
+        except Exception as e:
+            print((f"ERROR: file {filename} exists in ./data/tasks but could not "
+                   f"be deleted because:\n{e}"))
+
+    else:
+        print("ERROR: file {filename} does not exist in ./data/tasks")
