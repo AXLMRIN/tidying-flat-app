@@ -25,7 +25,16 @@ class User:
             'Score: ' + str(self.__score) + "\n" + 
             footline
         )
-
+    
+    def __getitem__(self, key : str):
+            if key == "name": return self.__name
+            elif key == "email": return self.__email
+            elif key == "color": return self.__color
+            elif key == "score": return self.__score
+            else: 
+                print(f"ERROR: key {key} does not exist. Return None")
+                return None
+            
     def __write(self):
         with open(self.__path, "w") as file:
             file.write(self.__name + "\n")
