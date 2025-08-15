@@ -27,7 +27,7 @@ def generate_calendar():
             microsecond = 0)
         # Add events for the next month
         next_occurence = last_occurence + pd.Timedelta(weeks = task["frequency"])
-        while next_occurence < today + pd.Timedelta(months = 1):
+        while next_occurence < today + pd.Timedelta(weeks = 4):
             calendar = pd.concat(
                 [
                     calendar,
