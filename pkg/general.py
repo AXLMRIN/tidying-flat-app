@@ -1,7 +1,5 @@
 import os 
 
-def test_function():
-    print("## TEST ##")
 
 def name_to_filename(name : str) -> str:
     filename = ''.join(c for c in name if c.isascii())
