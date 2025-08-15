@@ -5,13 +5,14 @@ from general import name_to_filename
 FOLDERNAME = "./data/users"
 
 class User:
-    def __init__(self, name : str = "", email : str = "", score : float = 0) -> None:
+    def __init__(self, name : str = "", email : str = "", color : str = "#000000",
+            score : float = 0) -> None:
         self.__name = name
         self.__filename = name_to_filename(name)
         self.__path = f"{FOLDERNAME}/{self.__filename}"
         self.__email = email
+        self.__color = color
         self.__score = score
-
 
     def __str__(self) -> str:
         headline = "## USER ########"
@@ -20,6 +21,7 @@ class User:
             headline + "\n" +
             self.__name + ' (' + self.__filename + ')\n' +
             self.__email + '\n' +
+            self.__color + '\n' +
             'Score: ' + str(self.__score) + "\n" + 
             footline
         )
@@ -28,6 +30,7 @@ class User:
         with open(self.__path, "w") as file:
             file.write(self.__name + "\n")
             file.write(self.__email + "\n")
+            file.write(self.__color + "\n")
             file.write(str(self.__score) + "\n")
 
     def save_to_disk(self):
@@ -48,10 +51,11 @@ class User:
                 content = file.readlines()
                 #Remove the "\n"
                 content = [line.replace("\n", "") for line in content]
-            self.__name = content[0]
-            self.__filename = name_to_filename(self.__name)
-            self.__path = f"{FOLDERNAME}/{self.__filename}"
-            self.__email = content[1]
-            self.__score = float(content[2])
+            name = content[0]
+            email = content[1]
+            color = content[2]
+            score = float(content[3])
+            return User(name, email, color, score)
         else:
             print(f"ERROR: {filename} does not exist in {FOLDERNAME}")
+            return None
