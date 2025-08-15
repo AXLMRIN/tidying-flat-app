@@ -21,8 +21,15 @@ class Task:
             self.__description + '\n' + 
             'every ' + str(self.__frequency) + " weeks\n" +
             footline
-
         )
+
+    def __getitem__(self, key : str):
+        if key == "name": return self.__name
+        elif key == "description": return self.__description
+        elif key == "frequency": return self.__frequency
+        else: 
+            print(f"ERROR: key {key} does not exist. Return None")
+            return None
 
     def __write(self):
         with open(self.__path, "w") as file:
