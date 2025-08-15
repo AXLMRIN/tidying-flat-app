@@ -1,5 +1,7 @@
 import os 
 
+import numpy as np
+import pandas as pd
 
 def name_to_filename(name : str) -> str:
     filename = ''.join(c for c in name if c.isascii())
@@ -70,3 +72,10 @@ def filter_calendar(calendar : pd.DataFrame, user : str = "/") -> pd.DataFrame:
     selected_IDs += selected_rows_late.to_list()
 
     return calendar.loc[np.isin(calendar["ID"], selected_IDs), :]
+
+def status_index(status) -> int:
+    # Make it cleaner
+    if status == "TODO": return 0
+    elif status == "DONE" : return 1
+    elif status == "SKIPPED" : return 2
+    else:return None
