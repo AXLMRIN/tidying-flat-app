@@ -25,9 +25,10 @@ def del_task(filename : str):
     if filename in list_of_existing_tasks:
         try:
             os.remove(f"./data/tasks/{filename}")
+            print(f"File {filename} was successfully deleted")
         except Exception as e:
             print((f"ERROR: file {filename} exists in ./data/tasks but could not "
                    f"be deleted because:\n{e}"))
 
     else:
-        print("ERROR: file {filename} does not exist in ./data/tasks")
+        print(f"ERROR: file {filename} does not exist in ./data/tasks")
