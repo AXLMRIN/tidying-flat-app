@@ -14,8 +14,16 @@ class Task:
 
 
     def __str__(self) -> str:
-        return (self.__name + ' (' + self.__filename + ')\n' + self.__description +
-            '\n' + 'every ' + str(self.__frequency) + " weeks")
+        headline = "## TASK ########"
+        footline = "#" * len(headline)
+        return (
+            headline + '\n' + 
+            self.__name + ' (' + self.__filename + ')\n' +
+            self.__description + '\n' + 
+            'every ' + str(self.__frequency) + " weeks\n" +
+            footline
+
+        )
 
     def __write(self):
         with open(self.__path, "w") as file:
@@ -41,10 +49,10 @@ class Task:
                 content = file.readlines()
                 #Remove the "\n"
                 content = [line.replace("\n", "") for line in content]
-            self.__name = content[0]
-            self.__filename = name_to_filename(self.__name)
-            self.__path = f"{FOLDERNAME}/{self.__filename}"
-            self.__description = content[1]
-            self.__frequency = float(content[2])
+            name = content[0]
+            description = content[1]
+            frequency = float(content[2])
+            return Task(name, description, frequency)
         else:
             print(f"ERROR: {filename} does not exist in {FOLDERNAME}")
+            return None
