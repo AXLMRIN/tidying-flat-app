@@ -78,6 +78,6 @@ def render_history(entry : pd.Series) -> str:
     return_str = f'''<div style="{style_div}">
     <p style="{style_text}">{entry["Task"]}</p>
     <p style="{style_text}">{entry["User"]}</p>
-    <p style="{style_text}">{entry["Deadline"].strftime("%Y-%m-%d")}</p>
+    <p style="{style_text}">{pd.Timestamp(entry["Deadline"]).strftime("%Y-%m-%d")}</p>
     </div>'''
     return return_str
