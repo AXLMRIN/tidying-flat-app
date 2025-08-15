@@ -12,7 +12,7 @@ def generate_calendar():
     today = pd.Timestamp.now()
     calendar = pd.read_csv("./data/calendar.csv")
     # Sort the values so that the low index (ie 0) is the more recent
-    calendar.sort_values("Deadline", ascending = False) 
+    calendar = calendar.sort_values("Deadline", ascending = False) 
     for task in get_all_tasks():
         task_name = task["name"]
         sub_calendar = calendar.loc[calendar["Task"] == task_name, :]
