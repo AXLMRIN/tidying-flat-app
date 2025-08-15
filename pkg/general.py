@@ -13,3 +13,7 @@ def get_list_of_tasks():
     all_tasks = [clean(task) for task in all_tasks]
     
     return all_tasks
+
+def name_to_filename(name : str) -> str:
+    filename = ''.join(c for c in name if c.isascii())
+    return filename + ".txt"
