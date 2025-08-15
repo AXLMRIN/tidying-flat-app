@@ -32,12 +32,12 @@ def generate_calendar():
                 [
                     calendar,
                     pd.DataFrame({
-                        "ID" : len(calendar),
-                        "Task" : task_name,
-                        "Status" : "TODO",
-                        "Deadline" : next_occurence,
-                        "User" : np.nan
-                    }),
+                        "ID" : [len(calendar)],
+                        "Task" : [task_name],
+                        "Status" : ["TODO"],
+                        "Deadline" : [next_occurence],
+                        "User" : [np.nan]
+                    })
                 ], 
                 ignore_index=True
             )
