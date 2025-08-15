@@ -35,8 +35,8 @@ def generate_calendar():
                         "ID" : [len(calendar)],
                         "Task" : [task_name],
                         "Status" : ["TODO"],
-                        "Deadline" : [next_occurence],
-                        "User" : [np.nan]
+                        "Deadline" : [next_occurence.strftime("%Y-%m-%d")],
+                        "User" : ["/"]
                     })
                 ], 
                 ignore_index=True
