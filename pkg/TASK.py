@@ -1,6 +1,6 @@
 import os
 
-from general import name_to_filename
+from .general import name_to_filename
 
 FOLDERNAME = "./data/tasks"
 
@@ -11,7 +11,6 @@ class Task:
         self.__path = f"{FOLDERNAME}/{self.__filename}"
         self.__description = description
         self.__frequency = frequency
-
 
     def __str__(self) -> str:
         headline = "## TASK ########"
@@ -56,3 +55,14 @@ class Task:
         else:
             print(f"ERROR: {filename} does not exist in {FOLDERNAME}")
             return None
+    
+    def get_data(self) -> dict:
+        return {
+            "name" : self.__name,
+            "description" : self.__description,
+            "frequency" : self.__frequency
+        }
+
+def get_all_tasks() -> list[Task]:
+    list_of_fileneames = os.listdir(FOLDERNAME)
+    return [Task().load_from_disk(filename) for filename in list_of_fileneames]
