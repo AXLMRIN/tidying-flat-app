@@ -31,8 +31,8 @@ class User:
             file.write(str(self.__score) + "\n")
 
     def save_to_disk(self):
-        list_of_existing_tasks = os.listdir(FOLDERNAME)
-        if self.__filename not in list_of_existing_tasks:
+        list_of_existing_users = os.listdir(FOLDERNAME)
+        if self.__filename not in list_of_existing_users:
             self.__write()
         else:
             print(f"A file named {self.__filename} already exists.")
@@ -42,8 +42,8 @@ class User:
             if overwrite: self.__write()
 
     def load_from_disk(self, filename : str) -> None:
-        list_of_existing_tasks = os.listdir(FOLDERNAME)
-        if filename in list_of_existing_tasks:
+        list_of_existing_users = os.listdir(FOLDERNAME)
+        if filename in list_of_existing_users:
             with open(f"{FOLDERNAME}/{filename}", "r") as file:
                 content = file.readlines()
                 #Remove the "\n"
