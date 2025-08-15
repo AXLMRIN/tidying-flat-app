@@ -1,6 +1,6 @@
 import os
 
-from general import name_to_filename
+from .general import name_to_filename
 
 FOLDERNAME = "./data/users"
 
@@ -59,3 +59,15 @@ class User:
         else:
             print(f"ERROR: {filename} does not exist in {FOLDERNAME}")
             return None
+    
+    def get_data(self) -> dict:
+        return {
+            "name" : self.__name,
+            "email" : self.__email,
+            "color" : self.__color,
+            "score" : self.__score
+        }
+
+def get_all_users() -> list[User]:
+    list_of_fileneames = os.listdir(FOLDERNAME)
+    return [User().load_from_disk(filename) for filename in list_of_fileneames]
