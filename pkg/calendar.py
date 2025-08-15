@@ -32,7 +32,7 @@ def generate_calendar():
                 [
                     calendar,
                     pd.DataFrame({
-                        "ID" : [len(calendar)],
+                        "ID" : [len(calendar) + 1],
                         "Task" : [task_name],
                         "Status" : ["TODO"],
                         "Deadline" : [next_occurence.strftime("%Y-%m-%d")],
