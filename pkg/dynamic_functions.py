@@ -1,7 +1,7 @@
 import pandas as pd
 import streamlit as st
 
-from . import status_index, get_all_users
+from . import status_index, get_all_users, CONNECTION
 
 def dialog_edit_task(id : int, calendar : pd.DataFrame) -> None:
     st.write(f'ID : {id}')
@@ -24,5 +24,5 @@ def dialog_edit_task(id : int, calendar : pd.DataFrame) -> None:
         # UPDATE the table
         calendar.loc[calendar["ID"]==id,"Status"] = status
         calendar.loc[calendar["ID"]==id,"User"] = new_user
-        calendar.to_csv("./data/calendar.csv")
+        CONNECTION.update(worksheet="Calendar", data = calendar)
         st.rerun()
