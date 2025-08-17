@@ -24,5 +24,5 @@ def dialog_edit_task(id : int, calendar : pd.DataFrame) -> None:
         # UPDATE the table
         calendar.loc[calendar["ID"]==id,"Status"] = status
         calendar.loc[calendar["ID"]==id,"User"] = new_user
-        CONNECTION.update(worksheet="Calendar", data = calendar)
+        CONNECTION.update(worksheet="Calendar", data = calendar) # SLOW
         st.rerun()
