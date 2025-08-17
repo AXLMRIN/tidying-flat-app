@@ -1,11 +1,11 @@
 import pandas as pd
 import streamlit as st
 
-from pkg import (test_function, generate_calendar, get_all_users, filter_calendar, 
+from pkg import (get_all_users, filter_calendar, 
     render_history, status_index, dialog_edit_task)
 
 # Generate the calendar for the next month
-generate_calendar()
+# generate_calendar()
 calendar = pd.read_csv("./data/calendar.csv")
 
 st.write("# Gestion des tâches de nettoyage dans la colocation")
