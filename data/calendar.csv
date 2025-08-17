@@ -1,14 +1,15 @@
-Unnamed: 0.4,Unnamed: 0.3,Unnamed: 0.2,Unnamed: 0.1,Unnamed: 0,ID,Task,Status,Deadline,User
-0,0,0,0,0,6,Cuisine,TODO,2025-09-12,/
-1,1,1,1,1,13,Salon,TODO,2025-09-10,/
-2,2,2,2,2,9,SDB du bas,TODO,2025-09-07,/
-3,3,3,3,3,5,Cuisine,TODO,2025-09-05,/
-4,4,4,4,4,12,Salon,TODO,2025-09-03,/
-5,5,5,5,5,8,SDB du bas,TODO,2025-08-31,/
-6,6,6,6,6,4,Cuisine,TODO,2025-08-29,/
-7,7,7,7,7,11,Salon,TODO,2025-08-27,/
-8,8,8,8,8,7,SDB du bas,TODO,2025-08-24,/
-9,9,9,9,9,3,Cuisine,SKIPPED,2025-08-22,Mathilde
-10,10,10,10,10,10,Salon,DONE,2025-08-20,/
-11,11,11,11,11,2,SDB du bas,DONE,2025-08-17,JM
-12,12,12,12,12,1,Salon,TODO,2025-08-13,Axel
+ID,Task,Status,Deadline,User
+6,Cuisine,TODO,2025-09-12,/
+13,Salon,TODO,2025-09-10,/
+9,SDB du bas,TODO,2025-09-07,/
+5,Cuisine,TODO,2025-09-05,/
+12,Salon,TODO,2025-09-03,/
+8,SDB du bas,TODO,2025-08-31,/
+4,Cuisine,TODO,2025-08-29,/
+11,Salon,TODO,2025-08-27,/
+7,SDB du bas,TODO,2025-08-24,/
+3,Cuisine,SKIPPED,2025-08-22,Mathilde
+10,Salon,DONE,2025-08-20,/
+2,SDB du bas,DONE,2025-08-17,JM
+1,Salon,TODO,2025-08-13,Axel
+14,SDB du bas,TODO,2025-09-14,/
