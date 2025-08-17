@@ -1,9 +1,9 @@
 import pandas as pd
 import streamlit as st
 
-from pkg import render_history
+from pkg import render_history, read_data
 
-calendar = pd.read_csv("./data/calendar.csv").sort_values("Deadline",ascending=False)
+calendar = read_data("Calendar")
 
 st.write("# History")
 
