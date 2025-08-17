@@ -1,16 +1,10 @@
 import pandas as pd
-import numpy as np
 
 from .TASK import Task, get_all_tasks
 
-def test_function():
-    print("## TEST ##")
-    generate_calendar()
-
-def generate_calendar():
+def generate_new_tasks_for_calendar(calendar : pd.DataFrame) -> pd.DataFrame:
     """generate calendar for the next month"""
     today = pd.Timestamp.now()
-    calendar = pd.read_csv("./data/calendar.csv")
     # Sort the values so that the low index (ie 0) is the more recent
     calendar = calendar.sort_values("Deadline", ascending = False) 
     for task in get_all_tasks():
@@ -42,5 +36,5 @@ def generate_calendar():
                 ignore_index=True
             )
             next_occurence = next_occurence + pd.Timedelta(weeks = task["frequency"])
-    calendar.to_csv("./data/calendar.csv", index = False)
+    return calendar
 
