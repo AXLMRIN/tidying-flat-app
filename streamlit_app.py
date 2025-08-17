@@ -2,11 +2,11 @@ import pandas as pd
 import streamlit as st
 
 from pkg import (get_all_users, filter_calendar, 
-    render_history, status_index, dialog_edit_task)
+    render_history, dialog_edit_task, read_data)
 
 # Generate the calendar for the next month
 # generate_calendar()
-calendar = pd.read_csv("./data/calendar.csv")
+calendar = read_data("Calendar")
 
 st.write("# Gestion des tâches de nettoyage dans la colocation")
 user_filter = st.selectbox(
