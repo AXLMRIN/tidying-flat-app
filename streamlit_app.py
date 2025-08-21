@@ -9,6 +9,14 @@ from pkg import (get_all_users, filter_calendar,
 calendar = read_data("Calendar")
 
 st.write("# Gestion des tâches de nettoyage dans la colocation")
+
+with st.container(horizontal = True):
+    if st.button("", key = "force-reload", icon = ":material/replay:"):
+        CONNECTION.force_reload()
+    if st.button("", key = "upload_changes", icon = ":material/cloud_upload:"):
+        CONNECTION.update_gsheet()
+
+
 user_filter = st.selectbox(
     label = "User", 
     options= ["/", *[user["name"] for user in get_all_users()]]
