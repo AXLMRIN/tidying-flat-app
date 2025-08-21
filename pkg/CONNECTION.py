@@ -7,30 +7,38 @@ from .USER import get_all_users
 
 class Connection:
     def __init__(self, worksheet : str) -> None:
+        print("Creation of the \"Connection\" object.")
         # initialise variables
         self.worksheet = worksheet
         self.__connection = st.connection("gsheets", type = GSheetsConnection)
+        print(f"Loading the dataframe ({self.worksheet})")
         try:
             # read the data
             self.data : pd.DataFrame|None= self.__connection.read(worksheet = worksheet)
+            print(f"Success (type data: {type(self.data)})")
         except:
-            print(("WARNING: force reload - Could not read the worksheet "
-                   f"({self.worksheet})."))
+            print("Loading failed, data = None ")
             self.data : pd.DataFrame|None = None
 
     def force_reload(self) -> None:
+        print(f"Force loading the dataframe ({self.worksheet})")
         try:
             self.data = self.__connection.read(worksheet = self.worksheet, ttl = 1)
+            print(f"Success (type data: {type(self.data)})")
         except:
-            print(("WARNING: force reload - Could not read the worksheet "
-                   f"({self.worksheet})."))
+            print("Loading failed, data = None ")
             self.data = None
 
     def __str__(self) -> str:
         return f"Worksheet: {self.worksheet}\ndata: {type(self.data)}"
     
     def update_gsheet(self) -> None:
-        self.__connection.update(worksheet = self.worksheet, data = self.data)
+        print("Updating the google sheet")
+        try:
+            self.__connection.update(worksheet = self.worksheet, data = self.data)
+            print(f"Success updating ({self.worksheet})")
+        except:
+            print(f"Failed updating ({self.worksheet})")
 
     def change_worksheet(self, worksheet : str) -> None:
         self.worksheet = worksheet
