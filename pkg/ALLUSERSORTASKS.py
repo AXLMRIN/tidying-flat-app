@@ -18,3 +18,6 @@ class AllUsersOrTasks:
         except:
             print("Loading failed, data = None ")
             self.data : pd.DataFrame|None = None
+
+    def get_all_names(self)-> list[str]:
+        return self.data["Name"].to_list()
