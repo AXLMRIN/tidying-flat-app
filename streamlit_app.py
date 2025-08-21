@@ -30,5 +30,5 @@ cols = st.columns(4)
 for iRow in range(len(tasks_to_display)):
     cols[iRow%4].write(render_history(tasks_to_display.iloc[iRow]), unsafe_allow_html=True)
     cols[iRow%4].button(label = "", icon = ":material/edit:", key = f"edit-{iRow}", 
-                        use_container_width = True, on_click=dialog, 
+                        use_container_width = True, on_click=CONNECTION.dialog_edit_task, 
                         args=[tasks_to_display.iloc[iRow]["ID"]])
