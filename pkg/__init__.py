@@ -4,3 +4,6 @@ from .USER import *
 from .renderer import *
 from .calendar import *
 from .CONNECTION import *
+
+
+CONNECTION = Connection("Calendar")
