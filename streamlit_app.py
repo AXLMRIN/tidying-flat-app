@@ -5,7 +5,7 @@ from pkg import (CONNECTION, get_all_users, render_history)
 
 st.set_page_config(page_title = "Flatify (free)",page_icon = "🧹")
 
-st.write("# Gestion des tâches de nettoyage dans la colocation")
+st.write("# Tâches de la semaine")
 
 with st.container(horizontal = True):
     if st.button("", key = "force-reload", icon = ":material/replay:"):
