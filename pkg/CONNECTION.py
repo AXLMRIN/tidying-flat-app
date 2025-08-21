@@ -25,8 +25,6 @@ class Connection:
     
     def generate_new_tasks_to_calendar(self) -> None:
         """generate calendar for the next month"""
-        print("\n" * 50)
-        print("#TEST", "#"*50)
         today = pd.Timestamp.now()
         # Retrieve the calendar
         calendar = self.data.copy()
@@ -36,9 +34,6 @@ class Connection:
 
         tasks_were_added = False
         for _, task in ALLTASKS.data.iterrows():
-            print("/"*100)
-            print(type(task))
-            print("/"*100)
             task_name = task["Name"]
             sub_calendar = calendar.loc[calendar["Task"] == task_name, :]
             if len(sub_calendar) == 0: 
@@ -52,9 +47,6 @@ class Connection:
                 microsecond = 0)
             # Add events for the next month
             next_occurence = last_occurence + pd.Timedelta(weeks = task["Frequency"])
-
-            # TODELETE
-            print(f"{task_name} : {last_occurence.strftime("%d/%m/%Y")}")
 
             while next_occurence < today + pd.Timedelta(weeks = 4):
                 if not tasks_were_added: tasks_were_added = True
@@ -77,7 +69,6 @@ class Connection:
         if tasks_were_added:
             self.data = calendar.copy()
             self.update_gsheet()
-        print("#FIN TEST", "#"*50)
 
     def force_reload(self) -> None:
         print(f"Force loading the dataframe ({self.worksheet})")
