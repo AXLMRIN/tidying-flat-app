@@ -21,3 +21,6 @@ class Connection:
             print(("WARNING: force reload - Could not read the worksheet "
                    f"({self.worksheet})."))
             self.data = None
+
+    def __str__(self) -> str:
+        return f"Worksheet: {self.worksheet}\ndata: {type(self.data)}"
