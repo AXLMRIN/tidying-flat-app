@@ -89,6 +89,29 @@ class Connection:
         # Sort the calendar per date
         calendar_filtered = calendar_filtered.sort_values(["Deadline"], ascending=True)
         return calendar_filtered
+    
+    def get_all_history(self, user : str = "/") -> pd.DataFrame:
+        calendar = self.data.copy()
+        # Transform the "Deadline" column (str) to Timestamp to be able to use 
+        # the < operator
+        calendar["Deadline"] = calendar["Deadline"].apply(pd.Timestamp)
+
+        # Fetch the IDs for the rows corresponding to tasks associated to a specific
+        # user, if provided
+        if user != "/":
+            selected_rows_user = calendar.loc[
+                calendar["User"] == user,
+                "ID"
+            ]   
+        else:
+            # Take them all because of the way we combine the lists, see below
+            selected_rows_user = calendar["ID"]
+
+        # Filter the calendar
+        calendar_filtered = calendar.loc[np.isin(calendar["ID"], selected_rows_user), :]
+        # Sort the calendar per date
+        calendar_filtered = calendar_filtered.sort_values(["Deadline"], ascending=True)
+
         return calendar_filtered
     
     @st.dialog("Edit Task")
