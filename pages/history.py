@@ -4,6 +4,14 @@ import streamlit as st
 from pkg import CONNECTION, render_history, get_all_users
 st.write("# History")
 
+with st.container(horizontal = True):
+    if st.button("", key = "force-reload", icon = ":material/replay:"):
+        CONNECTION.force_reload()
+    if st.button("", key = "upload_changes", icon = ":material/cloud_upload:"):
+        CONNECTION.update_gsheet()
+    if st.button("(DEGBUG) GENERATE"):
+        CONNECTION.generate_new_tasks_to_calendar()
+
 user = st.selectbox(
     label = "User", 
     options= ["/", *[user["name"] for user in get_all_users()]]
