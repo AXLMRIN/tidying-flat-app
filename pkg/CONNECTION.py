@@ -3,19 +3,19 @@ import pandas as pd
 import streamlit as st
 from streamlit_gsheets import GSheetsConnection
 
-from .USER import get_all_users
-from .TASK import get_all_tasks
+from . import ALLUSERS, ALLTASKS
 
 class Connection:
     def __init__(self, worksheet : str) -> None:
         print("Creation of the \"Connection\" object.")
         # initialise variables
-        self.worksheet = worksheet
+        self.worksheet = "Calendar"
         self.__connection = st.connection("gsheets", type = GSheetsConnection)
         print(f"Loading the dataframe ({self.worksheet})")
         try:
             # read the data
-            self.data : pd.DataFrame|None= self.__connection.read(worksheet = worksheet)
+            self.data : pd.DataFrame|None= \
+                self.__connection.read(worksheet = self.worksheet)
             print(f"Success (type data: {type(self.data)})")
         except:
             print("Loading failed, data = None ")
@@ -35,7 +35,7 @@ class Connection:
         calendar = calendar.sort_values("Deadline", ascending = False) 
 
         tasks_were_added = False
-        for task in get_all_tasks():
+        for task in ALLTASKS.get_all_names():
             task_name = task["name"]
             sub_calendar = calendar.loc[calendar["Task"] == task_name, :]
             if len(sub_calendar) == 0: 
@@ -196,7 +196,7 @@ class Connection:
         st.write("## Change user")
         current_user = self.data.loc[self.data["ID"]==id,"User"].item()
         st.write(f"Current user : {current_user}")
-        user_options = ["/", *[user["name"] for user in get_all_users()]]
+        user_options = ["/", *[user["name"] for user in ALLUSERS.get_all_names()]]
         new_user = st.selectbox(
             label = "User", 
             options = user_options,
