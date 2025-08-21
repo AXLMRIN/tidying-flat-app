@@ -14,5 +14,10 @@ class Connection:
                    f"({self.worksheet})."))
             self.data : pd.DataFrame|None = None
 
-    def force_reload(self):
-        self.data = self.__connection.read(worksheet = self.worksheet)
+    def force_reload(self) -> None:
+        try:
+            self.data = self.__connection.read(worksheet = self.worksheet, ttl = 1)
+        except:
+            print(("WARNING: force reload - Could not read the worksheet "
+                   f"({self.worksheet})."))
+            self.data = None
