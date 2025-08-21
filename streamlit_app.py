@@ -24,12 +24,7 @@ user_filter = st.selectbox(
 st.write("Liste des tâches à venir dans la semaine :")
 
 # Filter the calendar to display
-tasks_to_display = filter_calendar(calendar, user_filter)
-tasks_to_display = tasks_to_display.sort_values("Deadline",ascending=False)
-
-@st.dialog("Cast your vote")
-def dialog(id):
-    dialog_edit_task(id, calendar)
+tasks_to_display = CONNECTION.filter_calendar_per_user_and_date(user_filter)
 
 cols = st.columns(4)
 for iRow in range(len(tasks_to_display)):
