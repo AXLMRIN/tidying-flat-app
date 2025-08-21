@@ -1,5 +1,3 @@
-from .ALLUSERSORTASKS import User
-from .TASK import Task
 import pandas as pd
 
 STATUS_COLOR = {
