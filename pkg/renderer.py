@@ -2,6 +2,12 @@ from .USER import User
 from .TASK import Task
 import pandas as pd
 
+STATUS_COLOR = {
+    "DONE" : "#6a994e",
+    "TODO" : "#168aad",
+    "SKIPPED" : "#dad7cd"
+}
+
 def render_user(user:User) -> str:
     data = user.get_data()
 
@@ -63,10 +69,15 @@ def render_task(task:Task) -> str:
 
 def render_history(entry : pd.Series) -> str:
     entry : dict = entry.to_dict()
+    
+    try:
+        status_color = STATUS_COLOR[entry["Status"]]
+    except:
+        status_color = "grey"
 
     style_div = (
         "margin: 5px; border-radius: 15px; padding: 3px;"
-        "background-color: grey;"
+       f"background-color: {status_color};"
         "display: flex; flex-direction: column; flex-wrap: nowrap;"
         "justify-content: space-between; align-items: center;"
     )
