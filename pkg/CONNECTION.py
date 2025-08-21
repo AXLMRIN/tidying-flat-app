@@ -4,6 +4,7 @@ import streamlit as st
 from streamlit_gsheets import GSheetsConnection
 
 from .USER import get_all_users
+from .TASK import get_all_tasks
 
 class Connection:
     def __init__(self, worksheet : str) -> None:
@@ -19,6 +20,61 @@ class Connection:
         except:
             print("Loading failed, data = None ")
             self.data : pd.DataFrame|None = None
+        # generate new tasks to the calendar
+        self.generate_new_tasks_to_calendar()
+    
+    def generate_new_tasks_to_calendar(self) -> None:
+        """generate calendar for the next month"""
+        print("\n" * 50)
+        print("#TEST", "#"*50)
+        today = pd.Timestamp.now()
+        # Retrieve the calendar
+        calendar = self.data.copy()
+        # Sort the values so that the low index (ie 0) is the more recent
+        calendar["Deadline"] = calendar["Deadline"].apply(pd.Timestamp)
+        calendar = calendar.sort_values("Deadline", ascending = False) 
+
+        tasks_were_added = False
+        for task in get_all_tasks():
+            task_name = task["name"]
+            sub_calendar = calendar.loc[calendar["Task"] == task_name, :]
+            if len(sub_calendar) == 0: 
+                # The task does not appear in the history
+                last_occurence = today
+            else:
+                # Fetch the last iteration:
+                last_occurence = pd.Timestamp(sub_calendar.iloc[0]["Deadline"])
+            # Reset the time
+            last_occurence = last_occurence.replace(hour = 0, minute = 0, second = 0, 
+                microsecond = 0)
+            # Add events for the next month
+            next_occurence = last_occurence + pd.Timedelta(weeks = task["frequency"])
+
+            # TODELETE
+            print(f"{task["name"]} : {last_occurence.strftime("%d/%m/%Y")}")
+
+            while next_occurence < today + pd.Timedelta(weeks = 4):
+                if not tasks_were_added: tasks_were_added = True
+
+                calendar = pd.concat(
+                    [
+                        calendar,
+                        pd.DataFrame({
+                            "ID" : [len(calendar) + 1],
+                            "Task" : [task_name],
+                            "Status" : ["TODO"],
+                            "Deadline" : [next_occurence.strftime("%Y-%m-%d")],
+                            "User" : ["/"]
+                        })
+                    ], 
+                    ignore_index=True
+                )
+                next_occurence = next_occurence + pd.Timedelta(weeks = task["frequency"])
+        
+        if tasks_were_added:
+            self.data = calendar.copy()
+            self.update_gsheet()
+        print("#FIN TEST", "#"*50)
 
     def force_reload(self) -> None:
         print(f"Force loading the dataframe ({self.worksheet})")
