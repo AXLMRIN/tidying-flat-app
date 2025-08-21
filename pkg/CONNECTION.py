@@ -87,7 +87,8 @@ class Connection:
         # Filter the calendar
         calendar_filtered = calendar.loc[np.isin(calendar["ID"], selected_IDs), :]
         # Sort the calendar per date
-        calendar_filtered = calendar_filtered.sort_values(["Deadline"], ascending=False)
+        calendar_filtered = calendar_filtered.sort_values(["Deadline"], ascending=True)
+        return calendar_filtered
         return calendar_filtered
     
     @st.dialog("Edit Task")
