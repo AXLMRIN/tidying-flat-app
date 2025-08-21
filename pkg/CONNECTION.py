@@ -199,6 +199,8 @@ class Connection:
         )
         if st.button("Submit"):
             # Update data
-            self.data.loc[self.data["ID"]==id,"Status"] = new_status
-            self.data.loc[self.data["ID"]==id,"User"] = new_user
+            if (new_status in status_options)&(new_user in user_options):
+                # Safety measures
+                self.data.loc[self.data["ID"]==id,"Status"] = new_status
+                self.data.loc[self.data["ID"]==id,"User"] = new_user
             st.rerun()
