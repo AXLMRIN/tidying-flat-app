@@ -2,6 +2,9 @@ import pandas as pd
 import streamlit as st
 
 from pkg import CONNECTION, render_history, get_all_users
+
+st.set_page_config(page_title = "Flatify (free)",page_icon = "🧹")
+
 st.write("# History")
 
 with st.container(horizontal = True):

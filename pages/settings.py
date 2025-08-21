@@ -2,6 +2,8 @@ import streamlit as st
 
 from pkg import Task, get_all_tasks, User, get_all_users, render_user, render_task
 
+st.set_page_config(page_title = "Flatify (free)",page_icon = "🧹")
+
 st.write("# Settings")
 
 ######
