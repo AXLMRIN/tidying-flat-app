@@ -35,8 +35,11 @@ class Connection:
         calendar = calendar.sort_values("Deadline", ascending = False) 
 
         tasks_were_added = False
-        for task in ALLTASKS.get_all_names():
-            task_name = task["name"]
+        for _, task in ALLTASKS.data.iterrows():
+            print("/"*100)
+            print(type(task))
+            print("/"*100)
+            task_name = task["Name"]
             sub_calendar = calendar.loc[calendar["Task"] == task_name, :]
             if len(sub_calendar) == 0: 
                 # The task does not appear in the history
@@ -48,10 +51,10 @@ class Connection:
             last_occurence = last_occurence.replace(hour = 0, minute = 0, second = 0, 
                 microsecond = 0)
             # Add events for the next month
-            next_occurence = last_occurence + pd.Timedelta(weeks = task["frequency"])
+            next_occurence = last_occurence + pd.Timedelta(weeks = task["Frequency"])
 
             # TODELETE
-            print(f"{task["name"]} : {last_occurence.strftime("%d/%m/%Y")}")
+            print(f"{task_name} : {last_occurence.strftime("%d/%m/%Y")}")
 
             while next_occurence < today + pd.Timedelta(weeks = 4):
                 if not tasks_were_added: tasks_were_added = True
@@ -69,7 +72,7 @@ class Connection:
                     ], 
                     ignore_index=True
                 )
-                next_occurence = next_occurence + pd.Timedelta(weeks = task["frequency"])
+                next_occurence = next_occurence + pd.Timedelta(weeks = task["Frequency"])
         
         if tasks_were_added:
             self.data = calendar.copy()
@@ -196,7 +199,7 @@ class Connection:
         st.write("## Change user")
         current_user = self.data.loc[self.data["ID"]==id,"User"].item()
         st.write(f"Current user : {current_user}")
-        user_options = ["/", *[user["name"] for user in ALLUSERS.get_all_names()]]
+        user_options = ["/", *[user_name for user_name in ALLUSERS.get_all_names()]]
         new_user = st.selectbox(
             label = "User", 
             options = user_options,

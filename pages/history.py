@@ -1,7 +1,7 @@
 import pandas as pd
 import streamlit as st
 
-from pkg import CONNECTION, render_history, get_all_users
+from pkg import CONNECTION, render_history, ALLUSERS
 
 st.set_page_config(page_title = "Flatify (free)",page_icon = "🧹")
 
@@ -17,7 +17,7 @@ with st.container(horizontal = True):
 
 user = st.selectbox(
     label = "User", 
-    options= ["/", *[user["name"] for user in get_all_users()]]
+    options= ["/", *[user_name for user_name in ALLUSERS.get_all_names()]]
 )
 calendar = CONNECTION.get_all_history(user)
 cols = st.columns(3)
