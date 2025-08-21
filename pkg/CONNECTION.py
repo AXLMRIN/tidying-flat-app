@@ -3,6 +3,8 @@ import pandas as pd
 import streamlit as st
 from streamlit_gsheets import GSheetsConnection
 
+from .USER import get_all_users
+
 class Connection:
     def __init__(self, worksheet : str) -> None:
         # initialise variables
@@ -79,3 +81,37 @@ class Connection:
         # Sort the calendar per date
         calendar_filtered = calendar_filtered.sort_values(["Deadline"], ascending=True)
         return calendar_filtered
+    
+    @st.dialog("Cast your vote")
+    def dialog_edit_task(self, id : int) -> None:
+        st.write(f'ID : {id}')
+        st.write("## Change Status")
+
+        status_options = ["TODO", "DONE", "SKIPPED"]
+
+        def status_index():
+            # retrieve the current status index
+            current_status = self.data.loc[self.data["ID"]==id,"Status"].item()
+            return status_options.index(current_status)
+        
+        new_status = st.radio(
+            label = "Status",
+            options = status_options,
+            horizontal = True,
+            index = status_index()
+        )
+        st.write("## Change user")
+        current_user = self.data.loc[self.data["ID"]==id,"User"].item()
+        st.write(f"Current user : {current_user}")
+        user_options = ["/", *[user["name"] for user in get_all_users()]]
+        new_user = st.selectbox(
+            label = "User", 
+            options = user_options,
+            index = user_options.index(current_user),
+        )
+        if st.button("Submit"):
+            # Update data
+            self.data.loc[self.data["ID"]==id,"Status"] = new_status
+            self.data.loc[self.data["ID"]==id,"User"] = new_user
+
+            st.rerun()
