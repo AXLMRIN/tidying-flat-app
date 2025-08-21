@@ -20,9 +20,9 @@ user = st.selectbox(
     options= ["/", *[user["name"] for user in get_all_users()]]
 )
 calendar = CONNECTION.get_all_history(user)
-cols = st.columns(4)
+cols = st.columns(3)
 for iRow in range(len(calendar)):
-    cols[iRow%4].write(render_history(calendar.iloc[iRow]), unsafe_allow_html=True)
-    cols[iRow%4].button(label = "", icon = ":material/edit:", key = f"edit-{iRow}", 
+    cols[iRow%3].write(render_history(calendar.iloc[iRow]), unsafe_allow_html=True)
+    cols[iRow%3].button(label = "", icon = ":material/edit:", key = f"edit-{iRow}", 
                         use_container_width = True, on_click=CONNECTION.dialog_edit_task, 
                         args=[calendar.iloc[iRow]["ID"]])
