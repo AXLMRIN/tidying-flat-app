@@ -24,3 +24,6 @@ class Connection:
 
     def __str__(self) -> str:
         return f"Worksheet: {self.worksheet}\ndata: {type(self.data)}"
+    
+    def update_gsheet(self) -> None:
+        self.__connection.update(worksheet = self.worksheet, data = self.data)
