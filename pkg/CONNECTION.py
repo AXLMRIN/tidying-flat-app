@@ -87,10 +87,10 @@ class Connection:
         # Filter the calendar
         calendar_filtered = calendar.loc[np.isin(calendar["ID"], selected_IDs), :]
         # Sort the calendar per date
-        calendar_filtered = calendar_filtered.sort_values(["Deadline"], ascending=True)
+        calendar_filtered = calendar_filtered.sort_values(["Deadline"], ascending=False)
         return calendar_filtered
     
-    @st.dialog("Cast your vote")
+    @st.dialog("Edit Task")
     def dialog_edit_task(self, id : int) -> None:
         st.write(f'ID : {id}')
         st.write("## Change Status")
@@ -121,5 +121,4 @@ class Connection:
             # Update data
             self.data.loc[self.data["ID"]==id,"Status"] = new_status
             self.data.loc[self.data["ID"]==id,"User"] = new_user
-
             st.rerun()
