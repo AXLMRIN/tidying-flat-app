@@ -38,7 +38,7 @@ class Connection:
         calendar = self.data.copy()
         # Transform the "Deadline" column (str) to Timestamp to be able to use 
         # the < operator
-        calendar["Deadline"] = self.calendar["Deadline"].apply(pd.Timestamp)
+        calendar["Deadline"] = calendar["Deadline"].apply(pd.Timestamp)
 
         # Fetch the IDs for the rows corresponding to tasks which due date are
         # nigh
@@ -74,4 +74,8 @@ class Connection:
         # selected_rows_late are mutually exclusive
         selected_IDs += selected_rows_late.to_list()
 
-        return calendar.loc[np.isin(calendar["ID"], selected_IDs), :]
+        # Filter the calendar
+        calendar_filtered = calendar.loc[np.isin(calendar["ID"], selected_IDs), :]
+        # Sort the calendar per date
+        calendar_filtered = calendar_filtered.sort_values(["Deadline"], ascending=True)
+        return calendar_filtered
