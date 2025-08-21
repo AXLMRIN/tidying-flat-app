@@ -10,6 +10,8 @@ with st.container(horizontal = True):
         CONNECTION.force_reload()
     if st.button("", key = "upload_changes", icon = ":material/cloud_upload:"):
         CONNECTION.update_gsheet()
+    if st.button("(DEGBUG) GENERATE"):
+        CONNECTION.generate_new_tasks_to_calendar()
 
 
 user_filter = st.selectbox(
