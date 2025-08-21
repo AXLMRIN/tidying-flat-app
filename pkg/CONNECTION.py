@@ -27,3 +27,7 @@ class Connection:
     
     def update_gsheet(self) -> None:
         self.__connection.update(worksheet = self.worksheet, data = self.data)
+
+    def change_worksheet(self, worksheet : str) -> None:
+        self.worksheet = worksheet
+        self.force_reload()
