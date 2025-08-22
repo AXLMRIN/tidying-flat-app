@@ -63,36 +63,49 @@ class Connection:
             if len(sub_calendar) == 0: 
                 # The task does not appear in the history
                 last_occurence = today
+                last_user = input(f"Enter user name for the new task ({task_name})")
             else:
                 # Fetch the last iteration:
                 last_occurence = pd.Timestamp(sub_calendar.iloc[0]["Deadline"])
+                last_user = sub_calendar.iloc[0]["User"]
             # Reset the time
-            last_occurence = last_occurence.replace(hour = 0, minute = 0, second = 0, 
-                microsecond = 0)
+            last_occurence = last_occurence.\
+                replace(hour = 0, minute = 0, second = 0, microsecond = 0)
             # Add events for the next month
-            next_occurence = last_occurence + pd.Timedelta(weeks = task["Frequency"])
+            next_occurence = last_occurence + pd.Timedelta(weeks=task["Frequency"])
+            next_user = self.__choose_user(task["User pool"], last_user)
 
             while next_occurence < today + pd.Timedelta(weeks = 4):
                 if not tasks_were_added: tasks_were_added = True
 
-                calendar = pd.concat(
-                    [
-                        calendar,
-                        pd.DataFrame({
-                            "ID" : [len(calendar) + 1],
-                            "Task" : [task_name],
-                            "Status" : ["TODO"],
-                            "Deadline" : [next_occurence.strftime("%Y-%m-%d")],
-                            "User" : ["/"]
-                        })
-                    ], 
-                    ignore_index=True
-                )
+                # Create a new row and add it to the calendar
+                new_row = pd.DataFrame({
+                    "ID" : [len(calendar) + 1],
+                    "Task" : [task_name],
+                    "Status" : ["TODO"],
+                    "Deadline" : [next_occurence.strftime("%Y-%m-%d")],
+                    "User" : [next_user]
+                })
+                calendar = pd.concat([calendar,new_row], ignore_index=True)
+                
+                # Increment the next occurence
+                next_user = self.__choose_user(task["User pool"], next_user)
                 next_occurence = next_occurence + pd.Timedelta(weeks = task["Frequency"])
         
         if tasks_were_added:
             self.calendar = calendar.copy()
             self.update_gsheet()
+    
+    def __choose_user(self, user_pool : str, last_user : str) -> str:
+        if user_pool == "/": 
+            # User names contains "/" for other purposes, but we don't want it 
+            # when assigning tasks
+            user_pool = self.user_names[1:]
+        else: 
+           user_pool = [user_name.replace(" ","") for user_name in user_pool.split(",")]
+        current_index = user_pool.index(last_user)
+        next_index = (current_index + 1) % len(user_pool)
+        return user_pool[next_index]
 
     def force_reload(self) -> None:
         print(f"Force loading the dataframe ({self.calendar_worksheet})")
