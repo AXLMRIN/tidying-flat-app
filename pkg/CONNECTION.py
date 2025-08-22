@@ -3,37 +3,61 @@ import pandas as pd
 import streamlit as st
 from streamlit_gsheets import GSheetsConnection
 
-from . import ALLUSERS, ALLTASKS
-
 class Connection:
     def __init__(self, worksheet : str) -> None:
         print("Creation of the \"Connection\" object.")
         # initialise variables
-        self.worksheet = "Calendar"
+        self.calendar_worksheet = "Calendar"
+        self.tasks_worksheet = "Tasks"
+        self.users_worksheet = "Users"
+        self.tasks, self.users, self.calendar = (None,) * 3
+        self.user_names = ["/"]
         self.__connection = st.connection("gsheets", type = GSheetsConnection)
-        print(f"Loading the dataframe ({self.worksheet})")
+        
+        # Load the tasks
+        print(f"Loading the dataframe ({self.tasks_worksheet})")
         try:
             # read the data
-            self.data : pd.DataFrame|None= \
-                self.__connection.read(worksheet = self.worksheet)
-            print(f"Success (type data: {type(self.data)})")
+            self.tasks : pd.DataFrame = \
+                self.__connection.read(worksheet = self.tasks_worksheet)
+            print(f"Success (type data: {type(self.tasks)})")
         except:
             print("Loading failed, data = None ")
-            self.data : pd.DataFrame|None = None
-        # generate new tasks to the calendar
-        self.generate_new_tasks_to_calendar()
+        
+        # Load the Users
+        print(f"Loading the dataframe ({self.users_worksheet})")
+        try:
+            # read the data
+            self.users : pd.DataFrame = \
+                self.__connection.read(worksheet = self.users_worksheet)
+            print(f"Success (type data: {type(self.users)})")
+            self.user_names += self.users["Name"].to_list()
+        except:
+            print("Loading failed, data = None ")
+
+        # Load the calendar
+        print(f"Loading the dataframe ({self.calendar_worksheet})")
+        try:
+            # read the data
+            self.calendar : pd.DataFrame|None= \
+                self.__connection.read(worksheet = self.calendar_worksheet)
+            print(f"Success (type data: {type(self.calendar)})")
+            # generate new tasks to the calendar
+            self.generate_new_tasks_to_calendar()
+        except:
+            print("Loading failed, data = None ")
     
     def generate_new_tasks_to_calendar(self) -> None:
         """generate calendar for the next month"""
         today = pd.Timestamp.now()
         # Retrieve the calendar
-        calendar = self.data.copy()
+        calendar = self.calendar.copy()
         # Sort the values so that the low index (ie 0) is the more recent
         calendar["Deadline"] = calendar["Deadline"].apply(pd.Timestamp)
         calendar = calendar.sort_values("Deadline", ascending = False) 
 
         tasks_were_added = False
-        for _, task in ALLTASKS.data.iterrows():
+        for _, task in self.tasks.iterrows():
             task_name = task["Name"]
             sub_calendar = calendar.loc[calendar["Task"] == task_name, :]
             if len(sub_calendar) == 0: 
@@ -67,35 +91,35 @@ class Connection:
                 next_occurence = next_occurence + pd.Timedelta(weeks = task["Frequency"])
         
         if tasks_were_added:
-            self.data = calendar.copy()
+            self.calendar = calendar.copy()
             self.update_gsheet()
 
     def force_reload(self) -> None:
-        print(f"Force loading the dataframe ({self.worksheet})")
+        print(f"Force loading the dataframe ({self.calendar_worksheet})")
         try:
-            self.data = self.__connection.read(worksheet = self.worksheet, ttl = 1)
-            print(f"Success (type data: {type(self.data)})")
+            self.calendar = self.__connection.read(worksheet = self.calendar_worksheet, ttl = 1)
+            print(f"Success (type data: {type(self.calendar)})")
         except:
             print("Loading failed, data = None ")
-            self.data = None
+            self.calendar = None
 
     def __str__(self) -> str:
-        return f"Worksheet: {self.worksheet}\ndata: {type(self.data)}"
+        return f"Worksheet: {self.calendar_worksheet}\ndata: {type(self.calendar)}"
     
     def update_gsheet(self) -> None:
         print("Updating the google sheet")
         try:
-            self.__connection.update(worksheet = self.worksheet, data = self.data)
-            print(f"Success updating ({self.worksheet})")
+            self.__connection.update(worksheet = self.calendar_worksheet, data = self.calendar)
+            print(f"Success updating ({self.calendar_worksheet})")
         except:
-            print(f"Failed updating ({self.worksheet})")
+            print(f"Failed updating ({self.calendar_worksheet})")
 
     def change_worksheet(self, worksheet : str) -> None:
-        self.worksheet = worksheet
+        self.calendar_worksheet = worksheet
         self.force_reload()
 
     def filter_calendar_per_user_and_date(self, user : str = "/") -> pd.DataFrame:
-        calendar = self.data.copy()
+        calendar = self.calendar.copy()
         # Transform the "Deadline" column (str) to Timestamp to be able to use 
         # the < operator
         calendar["Deadline"] = calendar["Deadline"].apply(pd.Timestamp)
@@ -141,7 +165,7 @@ class Connection:
         return calendar_filtered
     
     def get_all_history(self, user : str = "/") -> pd.DataFrame:
-        calendar = self.data.copy()
+        calendar = self.calendar.copy()
         # Transform the "Deadline" column (str) to Timestamp to be able to use 
         # the < operator
         calendar["Deadline"] = calendar["Deadline"].apply(pd.Timestamp)
@@ -165,7 +189,7 @@ class Connection:
         return calendar_filtered
     
     def check(self, id : int) -> None:
-        self.data.loc[self.data["ID"]==id,"Status"] = "DONE"
+        self.calendar.loc[self.calendar["ID"]==id,"Status"] = "DONE"
         self.update_gsheet()
 
 
@@ -178,7 +202,7 @@ class Connection:
 
         def status_index():
             # retrieve the current status index
-            current_status = self.data.loc[self.data["ID"]==id,"Status"].item()
+            current_status = self.calendar.loc[self.calendar["ID"]==id,"Status"].item()
             return status_options.index(current_status)
         
         new_status = st.radio(
@@ -188,18 +212,18 @@ class Connection:
             index = status_index()
         )
         st.write("## Change user")
-        current_user = self.data.loc[self.data["ID"]==id,"User"].item()
+        current_user = self.calendar.loc[self.calendar["ID"]==id,"User"].item()
         st.write(f"Current user : {current_user}")
-        user_options = ["/", *[user_name for user_name in ALLUSERS.get_all_names()]]
+        
         new_user = st.selectbox(
             label = "User", 
-            options = user_options,
-            index = user_options.index(current_user),
+            options = self.user_names,
+            index = self.user_names.index(current_user),
         )
         if st.button("Submit"):
             # Update data
-            if (new_status in status_options)&(new_user in user_options):
+            if (new_status in status_options)&(new_user in self.user_names):
                 # Safety measures
-                self.data.loc[self.data["ID"]==id,"Status"] = new_status
-                self.data.loc[self.data["ID"]==id,"User"] = new_user
+                self.calendar.loc[self.calendar["ID"]==id,"Status"] = new_status
+                self.calendar.loc[self.calendar["ID"]==id,"User"] = new_user
             st.rerun()

@@ -1,7 +1,6 @@
-import pandas as pd
 import streamlit as st
 
-from pkg import (CONNECTION, ALLUSERS, ALLTASKS, render_history)
+from pkg import (CONNECTION, render_history)
 
 st.set_page_config(page_title = "Flatify (free)",page_icon = "🧹")
 
@@ -13,7 +12,7 @@ if st.button("(DEGBUG) GENERATE"):
 with st.container(horizontal = True, vertical_alignment = "bottom"):
     user_filter = st.selectbox(
         label = "User", 
-        options= ["/", *[user_name for user_name in ALLUSERS.get_all_names()]]
+        options= CONNECTION.user_names
     )
     if st.button("", key = "force-reload", icon = ":material/replay:"):
         CONNECTION.force_reload()
