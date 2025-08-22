@@ -63,7 +63,7 @@ class Connection:
             if len(sub_calendar) == 0: 
                 # The task does not appear in the history
                 last_occurence = today
-                last_user = input(f"Enter user name for the new task ({task_name})")
+                last_user = input(f"{self.user_names} Enter user name for the new task ({task_name})\n")
             else:
                 # Fetch the last iteration:
                 last_occurence = pd.Timestamp(sub_calendar.iloc[0]["Deadline"])
