@@ -22,7 +22,7 @@ class Connection:
                 self.__connection.read(worksheet = self.tasks_worksheet)
             print(f"Success (type data: {type(self.tasks)})")
         except:
-            print("Loading failed, data = None ")
+            print("Loading failed, tasks = None ")
         
         # Load the Users
         print(f"Loading the dataframe ({self.users_worksheet})")
@@ -33,7 +33,7 @@ class Connection:
             print(f"Success (type data: {type(self.users)})")
             self.user_names += self.users["Name"].to_list()
         except:
-            print("Loading failed, data = None ")
+            print("Loading failed, users = None ")
 
         # Load the calendar
         print(f"Loading the dataframe ({self.calendar_worksheet})")
@@ -45,8 +45,7 @@ class Connection:
             # generate new tasks to the calendar
             self.generate_new_tasks_to_calendar()
         except:
-            print("Loading failed, data = None ")
-    
+            print("Loading failed, calendar = None ")
     def generate_new_tasks_to_calendar(self) -> None:
         """generate calendar for the next month"""
         today = pd.Timestamp.now()
