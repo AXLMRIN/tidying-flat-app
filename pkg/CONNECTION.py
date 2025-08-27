@@ -94,7 +94,7 @@ class Connection:
                     "ID" : [f"T-{self.__crop_task_name(task_name)}-{task_number}"],
                     "Task" : [task_name],
                     "Status" : ["TODO"],
-                    "Deadline" : [next_occurence.strftime("%Y-%m-%d")], #str
+                    "Deadline" : [next_occurence], #Timestamp
                     "User" : [next_user]
                 })
                 calendar = pd.concat([calendar,new_row], ignore_index=True)
@@ -105,6 +105,9 @@ class Connection:
                 task_number += 1
         
         if tasks_were_added:
+            # Change back the Deadline to strings
+            calendar["Deadline"] = calendar["Deadline"].apply(
+                lambda timestamp : timestamp.strftime("%Y-%m-%d"))
             self.calendar = calendar.copy()
             self.update_gsheet()
     
