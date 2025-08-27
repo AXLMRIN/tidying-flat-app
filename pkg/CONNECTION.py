@@ -94,7 +94,7 @@ class Connection:
                     "ID" : [f"T-{self.__crop_task_name(task_name)}-{task_number}"],
                     "Task" : [task_name],
                     "Status" : ["TODO"],
-                    "Deadline" : [next_occurence.strftime("%Y-%m-%d")],
+                    "Deadline" : [next_occurence.strftime("%Y-%m-%d")], #str
                     "User" : [next_user]
                 })
                 calendar = pd.concat([calendar,new_row], ignore_index=True)
