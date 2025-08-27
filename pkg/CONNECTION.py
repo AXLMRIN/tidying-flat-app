@@ -115,9 +115,14 @@ class Connection:
             user_pool = self.user_names[1:]
         else: 
            user_pool = [user_name.replace(" ","") for user_name in user_pool.split(",")]
-        current_index = user_pool.index(last_user)
-        next_index = (current_index + 1) % len(user_pool)
-        return user_pool[next_index]
+        try:
+            current_index = user_pool.index(last_user)
+            next_index = (current_index + 1) % len(user_pool)
+            return user_pool[next_index]
+        except:
+            print((f"ERREUR (__choose_user): {last_user} not in {user_pool}, "
+                   f"returned {user_pool[0]}"))
+            return user_pool[0]
 
     def force_reload(self) -> None:
         print(f"Force loading the dataframe ({self.calendar_worksheet})")
