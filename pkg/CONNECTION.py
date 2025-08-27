@@ -46,6 +46,17 @@ class Connection:
             self.generate_new_tasks_to_calendar()
         except:
             print("Loading failed, calendar = None ")
+    
+    def __crop_task_name(self, task_name: str)->str:
+        "Salle de bain (haut) -> SDBH"
+        task_name_words = task_name.\
+            replace("/","").\
+            replace("(","").\
+            replace(")","").\
+            split(" ")
+        print(task_name_words)
+        return "".join([word[0].capitalize() for word in task_name_words if word !=""])
+            
     def generate_new_tasks_to_calendar(self) -> None:
         """generate calendar for the next month"""
         today = pd.Timestamp.now()
@@ -73,13 +84,14 @@ class Connection:
             # Add events for the next month
             next_occurence = last_occurence + pd.Timedelta(weeks=task["Frequency"])
             next_user = self.__choose_user(task["User pool"], last_user)
+            task_number = len(sub_calendar)+1
 
             while next_occurence < today + pd.Timedelta(weeks = 4):
                 if not tasks_were_added: tasks_were_added = True
 
                 # Create a new row and add it to the calendar
                 new_row = pd.DataFrame({
-                    "ID" : [len(calendar) + 1],
+                    "ID" : [f"T-{self.__crop_task_name(task_name)}-{task_number}"],
                     "Task" : [task_name],
                     "Status" : ["TODO"],
                     "Deadline" : [next_occurence.strftime("%Y-%m-%d")],
@@ -90,6 +102,7 @@ class Connection:
                 # Increment the next occurence
                 next_user = self.__choose_user(task["User pool"], next_user)
                 next_occurence = next_occurence + pd.Timedelta(weeks = task["Frequency"])
+                task_number += 1
         
         if tasks_were_added:
             self.calendar = calendar.copy()
