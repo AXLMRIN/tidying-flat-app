@@ -2,7 +2,7 @@ import streamlit as st
 
 from pkg import CONNECTION, render_history
 
-st.set_page_config(page_title = "Flatify (free)",page_icon = "🧹")
+st.set_page_config(page_title = "Ménage - Historique",page_icon = "🧹")
 
 st.write("# History")
 
