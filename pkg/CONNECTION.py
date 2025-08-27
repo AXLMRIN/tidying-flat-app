@@ -221,6 +221,11 @@ class Connection:
         self.calendar.loc[self.calendar["ID"]==id,"Status"] = "DONE"
         self.update_gsheet()
 
+    @st.dialog("Task description")
+    def dialog_task_description(self, task_name : str) -> None:
+        st.write(task_name)
+        st.write(self.tasks.loc[self.tasks["Name"] == task_name,"Description"].item())
+
     @st.dialog("Edit Task")
     def dialog_edit_task(self, id : int) -> None:
         st.write(f'ID : {id}')
