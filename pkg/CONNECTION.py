@@ -156,32 +156,31 @@ class Connection:
 
         selected_rows_date = calendar.loc[
             (calendar["Deadline"] >= date_min) & (calendar["Deadline"] <= date_max),
-            "ID"
-        ]
+            "ID"].\
+            to_list()
 
         # Fetch the IDs for the rows corresponding to tasks associated to a specific
         # user, if provided
         if user != "/":
             selected_rows_user = calendar.loc[
                 calendar["User"] == user,
-                "ID"
-            ]   
+                "ID"].\
+                to_list()   
         else:
             # Take them all because of the way we combine the lists, see below
-            selected_rows_user = calendar["ID"]
+            selected_rows_user = calendar["ID"].to_list()
         
         # Fetch the IDs that have not been completed
         selected_rows_late = calendar.loc[
-            (calendar["Status"] != "DONE")&(calendar["Status"] != "SKIPPED")&\
-                (calendar["Deadline"] < date_min),
-            "ID"
-        ]
-
+            (calendar["Status"] == "TODO")&(calendar["Deadline"] < date_min),
+            "ID"].\
+            to_list()
+        
         # Combine IDs from the user and date
         selected_IDs = [ID for ID in selected_rows_date if ID in selected_rows_user]
         # Add the IDs for the late tasks, technically, the selected_rows_date and the
         # selected_rows_late are mutually exclusive
-        selected_IDs += selected_rows_late.to_list()
+        selected_IDs += selected_rows_late
 
         # Filter the calendar
         calendar_filtered = calendar.loc[np.isin(calendar["ID"], selected_IDs), :]
