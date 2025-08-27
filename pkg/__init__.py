@@ -1,4 +1,4 @@
 from .CONNECTION import *
-CONNECTION = Connection("Calendar")
+CONNECTION = Connection()
 
 from .renderer import *

@@ -4,7 +4,7 @@ import streamlit as st
 from streamlit_gsheets import GSheetsConnection
 
 class Connection:
-    def __init__(self, worksheet : str) -> None:
+    def __init__(self) -> None:
         print("Creation of the \"Connection\" object.")
         # initialise variables
         self.calendar_worksheet = "Calendar"
