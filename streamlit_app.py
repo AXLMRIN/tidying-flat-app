@@ -45,3 +45,6 @@ for iRow in range(len(tasks_to_display)):
         st.button(label = "", icon = ":material/edit:", key = f"edit-{iRow}", 
                             on_click=CONNECTION.dialog_edit_task, 
                             args=[tasks_to_display.iloc[iRow]["ID"]])
+        st.button(label = "", icon = ":material/info:", key = f"info-{iRow}", 
+                            on_click=CONNECTION.dialog_task_description, 
+                            args=[tasks_to_display.iloc[iRow]["Task"]])
