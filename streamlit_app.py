@@ -9,6 +9,16 @@ st.write("# Tâches de la semaine")
 if st.button("(DEGBUG) GENERATE"):
     CONNECTION.generate_new_tasks_to_calendar()
 
+with st.expander("How to use:", expanded = True):
+    st.write((
+    ":material/check: : Valider une tâche.\n\n"
+    ":material/edit: : Éditer une tâches (statut `DONE, TODO, SKIPPED`) et l'utilisateur.ice. "
+    "Les changements ne sont pas sauvegardés tant que vous n'avez pas appuyé sur "
+    ":material/cloud_upload:\n\n"
+    ":material/cloud_upload: : Sauvegarder les changements.\n\n"
+    ":material/replay: : Force à recharger la page si vous ne voyez pas vos changements.\n\n"
+    ))
+
 with st.container(horizontal = True, vertical_alignment = "bottom"):
     user_filter = st.selectbox(
         label = "User", 
