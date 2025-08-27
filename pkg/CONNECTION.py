@@ -199,11 +199,11 @@ class Connection:
         if user != "/":
             selected_rows_user = calendar.loc[
                 calendar["User"] == user,
-                "ID"
-            ]   
+                "ID"].\
+                to_list()   
         else:
             # Take them all because of the way we combine the lists, see below
-            selected_rows_user = calendar["ID"]
+            selected_rows_user = calendar["ID"].to_list()
 
         # Filter the calendar
         calendar_filtered = calendar.loc[np.isin(calendar["ID"], selected_rows_user), :]
