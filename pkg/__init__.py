@@ -1,4 +1,4 @@
-from .CONNECTION import *
+from .ConnectionClass import *
 CONNECTION = Connection()
 
 from .renderer import *
