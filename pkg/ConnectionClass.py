@@ -54,7 +54,6 @@ class Connection:
             replace("(","").\
             replace(")","").\
             split(" ")
-        print(task_name_words)
         return "".join([word[0].capitalize() for word in task_name_words if word !=""])
             
     def generate_new_tasks_to_calendar(self) -> None:
