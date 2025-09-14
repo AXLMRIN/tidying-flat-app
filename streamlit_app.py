@@ -6,9 +6,6 @@ st.set_page_config(page_title = "Ménage",page_icon = "🧹")
 
 st.write("# Tâches de la semaine")
 
-if st.button("(DEGBUG) GENERATE"):
-    CONNECTION.generate_new_tasks_to_calendar()
-
 with st.expander("How to use:", expanded = True):
     st.write((
     ":material/check: : Valider une tâche.\n\n"
