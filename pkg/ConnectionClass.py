@@ -184,17 +184,8 @@ class Connection:
             # Take them all because of the way we combine the lists, see below
             selected_rows_user = calendar["ID"].to_list()
         
-        # Fetch the IDs that have not been completed
-        selected_rows_late = calendar.loc[
-            (calendar["Status"] == "TODO"),
-            "ID"].\
-            to_list()
-        
         # Combine IDs from the user and date
         selected_IDs = [ID for ID in selected_rows_date if ID in selected_rows_user]
-        # Add the IDs for the late tasks, technically, the selected_rows_date and the
-        # selected_rows_late are mutually exclusive
-        selected_IDs += selected_rows_late
 
         # Filter the calendar
         calendar_filtered = calendar.loc[np.isin(calendar["ID"], selected_IDs), :]
