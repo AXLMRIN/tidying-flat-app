@@ -28,18 +28,48 @@ with st.container(horizontal = True, vertical_alignment = "bottom"):
 
 # Filter the calendar to display
 st.write(f"Tâches de {user_filter if user_filter!='/' else 'tout le monde'}")
-tasks_to_display = CONNECTION.filter_calendar_per_user_and_date(user_filter)
+tasks_to_display, date_min, date_max = \
+    CONNECTION.filter_calendar_per_user_and_date(user_filter)
 
+i_element = 0
+
+st.write(f"### Entre {date_min.strftime("%a %d")} et {date_max.strftime("%a %d")}")
 cols = st.columns(3)
 for iRow in range(len(tasks_to_display)):
     cols[iRow%3].write(render_history(tasks_to_display.iloc[iRow]), unsafe_allow_html=True)
     with cols[iRow%3].container(horizontal = True, horizontal_alignment = "center", vertical_alignment="center"):
-        st.button(label = "", icon = ":material/check:", key = f"check-{iRow}", 
+        st.button(label = "", icon = ":material/check:", key = f"check-{i_element}", 
                             on_click=CONNECTION.check, 
                             args=[tasks_to_display.iloc[iRow]["ID"]])
-        st.button(label = "", icon = ":material/edit:", key = f"edit-{iRow}", 
+        st.button(label = "", icon = ":material/edit:", key = f"edit-{i_element}", 
                             on_click=CONNECTION.dialog_edit_task, 
                             args=[tasks_to_display.iloc[iRow]["ID"]])
-        st.button(label = "", icon = ":material/info:", key = f"info-{iRow}", 
+        st.button(label = "", icon = ":material/info:", key = f"info-{i_element}", 
                             on_click=CONNECTION.dialog_task_description, 
                             args=[tasks_to_display.iloc[iRow]["Task"]])
+    i_element += 1
+# ---
+week_shift = st.select_slider(
+    label = "Prochaines semaines",
+    options = [1,2,3]
+)
+st.write(week_shift)
+tasks_to_display_next, date_min_next, date_max_next = \
+    CONNECTION.filter_calendar_per_user_and_date(user_filter, week_shift)
+
+st.write(f"### Entre {date_min_next.strftime("%a %d")} et {date_max_next.strftime("%a %d")}")
+
+cols_next = st.columns(3)
+for iRow in range(len(tasks_to_display_next)):
+    cols_next[iRow%3].write(render_history(tasks_to_display_next.iloc[iRow]), unsafe_allow_html=True)
+    with cols_next[iRow%3].container(horizontal = True, horizontal_alignment = "center", vertical_alignment="center"):
+        st.button(label = "", icon = ":material/check:", key = f"check-{i_element}", 
+                            on_click=CONNECTION.check, 
+                            args=[tasks_to_display_next.iloc[iRow]["ID"]])
+        st.button(label = "", icon = ":material/edit:", key = f"edit-{i_element}", 
+                            on_click=CONNECTION.dialog_edit_task, 
+                            args=[tasks_to_display_next.iloc[iRow]["ID"]])
+        st.button(label = "", icon = ":material/info:", key = f"info-{i_element}", 
+                            on_click=CONNECTION.dialog_task_description, 
+                            args=[tasks_to_display_next.iloc[iRow]["Task"]])
+    i_element += 1

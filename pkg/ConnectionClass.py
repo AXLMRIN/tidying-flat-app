@@ -151,7 +151,10 @@ class Connection:
         self.calendar_worksheet = worksheet
         self.force_reload()
 
-    def filter_calendar_per_user_and_date(self, user : str = "/") -> pd.DataFrame:
+    def filter_calendar_per_user_and_date(self, user : str = "/", week_shift : int = 0
+            ) -> pd.DataFrame:
+        """"""
+        st.write(f"EEE : {week_shift}")
         if self.calendar is None : self.force_reload()
         calendar = self.calendar.copy()
         # Transform the "Deadline" column (str) to Timestamp to be able to use 
@@ -160,8 +163,17 @@ class Connection:
 
         # Fetch the IDs for the rows corresponding to tasks which due date are
         # nigh
-        date_max = pd.Timestamp.now() + pd.Timedelta(weeks = 1)
-        date_min = pd.Timestamp.now() - pd.Timedelta(days = 1)
+        today = pd.Timestamp.now() 
+        date_max = (
+            today
+            + pd.Timedelta(days = 7 - today.dayofweek - 1)
+            + pd.Timedelta(weeks = week_shift)
+        )
+        date_min = (
+            today
+            - pd.Timedelta(days = today.dayofweek)
+            + pd.Timedelta(weeks = week_shift)
+        )
 
         selected_rows_date = (
             calendar.loc[
@@ -193,7 +205,7 @@ class Connection:
         calendar_filtered = calendar.loc[np.isin(calendar["ID"], selected_IDs), :]
         # Sort the calendar per date
         calendar_filtered = calendar_filtered.sort_values(["Deadline"], ascending=True)
-        return calendar_filtered
+        return calendar_filtered, date_min, date_max
     
     def get_all_history(self, user : str = "/") -> pd.DataFrame:
         if self.calendar is None: self.force_reload()
