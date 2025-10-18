@@ -6,7 +6,7 @@ st.set_page_config(page_title = "Ménage",page_icon = "🧹")
 
 st.write("# Tâches de la semaine")
 
-with st.expander("How to use:", expanded = True):
+with st.expander("How to use:", expanded = False):
     st.write((
     ":material/check: : Valider une tâche.\n\n"
     ":material/edit: : Éditer une tâches (statut `DONE, TODO, SKIPPED`) et l'utilisateur.ice. "
