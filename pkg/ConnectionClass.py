@@ -158,28 +158,35 @@ class Connection:
 
         # Fetch the IDs for the rows corresponding to tasks which due date are
         # nigh
-        date_max = pd.Timestamp.now() + pd.Timedelta(weeks = 1)
+        date_max = pd.Timestamp.now() + pd.Timedelta(weeks = 1, days = 1)
         date_min = pd.Timestamp.now() - pd.Timedelta(days = 1)
 
-        selected_rows_date = calendar.loc[
-            (calendar["Deadline"] >= date_min) & (calendar["Deadline"] <= date_max),
-            "ID"].\
+        selected_rows_date = (
+            calendar.loc[
+                (calendar["Deadline"] >= date_min) & 
+                (calendar["Deadline"] <= date_max),
+                "ID"
+            ].
             to_list()
+        )
 
         # Fetch the IDs for the rows corresponding to tasks associated to a specific
         # user, if provided
         if user != "/":
-            selected_rows_user = calendar.loc[
-                calendar["User"] == user,
-                "ID"].\
-                to_list()   
+            selected_rows_user = (
+                calendar.loc[
+                    calendar["User"] == user,
+                    "ID"
+                ].
+                to_list()  
+            )
         else:
             # Take them all because of the way we combine the lists, see below
             selected_rows_user = calendar["ID"].to_list()
         
         # Fetch the IDs that have not been completed
         selected_rows_late = calendar.loc[
-            (calendar["Status"] == "TODO")&(calendar["Deadline"] < date_min),
+            (calendar["Status"] == "TODO"),
             "ID"].\
             to_list()
         
