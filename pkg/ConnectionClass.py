@@ -60,6 +60,7 @@ class Connection:
         """generate calendar for the next month"""
         today = pd.Timestamp.now()
         # Retrieve the calendar
+        if self.calendar is None: self.force_reload()
         calendar = self.calendar.copy()
         # Sort the values so that the low index (ie 0) is the more recent
         calendar["Deadline"] = calendar["Deadline"].apply(pd.Timestamp)
@@ -151,6 +152,7 @@ class Connection:
         self.force_reload()
 
     def filter_calendar_per_user_and_date(self, user : str = "/") -> pd.DataFrame:
+        if self.calendar is None : self.force_reload()
         calendar = self.calendar.copy()
         # Transform the "Deadline" column (str) to Timestamp to be able to use 
         # the < operator
@@ -194,6 +196,7 @@ class Connection:
         return calendar_filtered
     
     def get_all_history(self, user : str = "/") -> pd.DataFrame:
+        if self.calendar is None: self.force_reload()
         calendar = self.calendar.copy()
         # Transform the "Deadline" column (str) to Timestamp to be able to use 
         # the < operator
