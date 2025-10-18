@@ -158,7 +158,7 @@ class Connection:
 
         # Fetch the IDs for the rows corresponding to tasks which due date are
         # nigh
-        date_max = pd.Timestamp.now() + pd.Timedelta(weeks = 1, days = 1)
+        date_max = pd.Timestamp.now() + pd.Timedelta(weeks = 1)
         date_min = pd.Timestamp.now() - pd.Timedelta(days = 1)
 
         selected_rows_date = (
