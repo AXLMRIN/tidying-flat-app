@@ -27,7 +27,7 @@ with st.container(horizontal = True, vertical_alignment = "bottom"):
         CONNECTION.update_gsheet()
 
 # Filter the calendar to display
-st.write(f"Tâches de {user_filter} (+ tâches en retard)")
+st.write(f"Tâches de {user_filter if user_filter!='/' else 'tout le monde'}")
 tasks_to_display = CONNECTION.filter_calendar_per_user_and_date(user_filter)
 
 cols = st.columns(3)
