@@ -30,8 +30,6 @@ with st.container(horizontal = True, vertical_alignment = "bottom"):
 st.write(f"Tâches de {user_filter} (+ tâches en retard)")
 tasks_to_display = CONNECTION.filter_calendar_per_user_and_date(user_filter)
 
-st.warning(":material/warning: Il se pourrait qu'il y ait un soucis avec le filtrage des tâches par utilisateur.ice, si vous voyez une erreur prévenez moi avec capture d'écran, merci! :)")
-
 cols = st.columns(3)
 for iRow in range(len(tasks_to_display)):
     cols[iRow%3].write(render_history(tasks_to_display.iloc[iRow]), unsafe_allow_html=True)
