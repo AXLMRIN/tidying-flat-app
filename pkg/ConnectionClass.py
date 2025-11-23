@@ -154,7 +154,6 @@ class Connection:
     def filter_calendar_per_user_and_date(self, user : str = "/", week_shift : int = 0
             ) -> pd.DataFrame:
         """"""
-        st.write(f"EEE : {week_shift}")
         if self.calendar is None : self.force_reload()
         calendar = self.calendar.copy()
         # Transform the "Deadline" column (str) to Timestamp to be able to use 

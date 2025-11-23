@@ -53,7 +53,7 @@ week_shift = st.select_slider(
     label = "Prochaines semaines",
     options = [1,2,3]
 )
-st.write(week_shift)
+
 tasks_to_display_next, date_min_next, date_max_next = \
     CONNECTION.filter_calendar_per_user_and_date(user_filter, week_shift)
 
